@@ -32,7 +32,7 @@
 #### 1. Установка PostgreSQL
 
 **macOS:**
-```bash
+bash
 brew install postgresql@15
 brew services start postgresql@15
 Ubuntu:
@@ -41,7 +41,7 @@ bash
 sudo apt update
 sudo apt install postgresql postgresql-contrib
 sudo service postgresql start
-2. Создание БД и пользователя
+#### 2. Создание БД и пользователя
 
 bash
 sudo -u postgres psql
@@ -50,7 +50,7 @@ CREATE USER payment_user WITH PASSWORD 'payment_pass';
 CREATE DATABASE payment_db OWNER payment_user;
 GRANT ALL PRIVILEGES ON DATABASE payment_db TO payment_user;
 \q
-3. Настройка проекта
+#### 3. Настройка проекта
 
 bash
 # Клонируем и переходим в папку
@@ -87,7 +87,8 @@ ADMIN_FULL_NAME=Admin User
 USER_EMAIL=user@test.com
 USER_PASSWORD=user123
 USER_FULL_NAME=Test User
-4. Миграции и запуск
+
+#### 4. Миграции и запуск
 
 bash
 # Применяем миграции
@@ -98,55 +99,53 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 Приложение доступно: http://localhost:8000
 Swagger: http://localhost:8000/docs
 
-Запуск с Docker Compose
+---
 
-1. Запуск
+### Запуск с Docker Compose
+
+#### 1. Запуск
 
 bash
 # Сборка и запуск
 docker-compose up -d --build
 
-2. Доступ
+#### 2. Доступ
 
 API: http://localhost:8000
 Swagger: http://localhost:8000/docs
 PostgreSQL: localhost:5433 (пароль: payment_pass)
-3. Остановка
+#### 3. Остановка
 
 bash
 docker-compose down
 API Эндпоинты
 
-Аутентификация
+--- 
 
-Метод	Эндпоинт	Описание
-POST	/api/auth/login	Вход (email/password)
-Пользовательские
+### Аутентификация
 
-Метод	Эндпоинт	Описание
-GET	/api/users/me	Данные пользователя
-GET	/api/users/me/accounts	Список счетов
-GET	/api/users/me/transactions	История платежей
-Административные
-
-Метод	Эндпоинт	Описание
-GET	/api/admin/me	Данные админа
-POST	/api/admin/users	Создать пользователя
-GET	/api/admin/users	Список пользователей
-GET	/api/admin/users/{id}	Получить пользователя
-PUT	/api/admin/users/{id}	Обновить пользователя
-DELETE	/api/admin/users/{id}	Удалить пользователя
-GET	/api/admin/users/{id}/accounts	Счета пользователя
-Вебхук
-
-Метод	Эндпоинт	Описание
-POST	/api/webhook/payment	Обработка вебхука
-POST	/api/webhook/generate-signature	Генерация подписи (только админ)
+| Метод | Эндпоинт | Описание | Группа |
+|-------|----------|----------|--------|
+| POST | `/api/auth/login` | Вход (email/password) | Аутентификация |
+| GET | `/api/users/me` | Данные пользователя | Пользовательские |
+| GET | `/api/users/me/accounts` | Список счетов | Пользовательские |
+| GET | `/api/users/me/transactions` | История платежей | Пользовательские |
+| GET | `/api/admin/me` | Данные админа | Административные |
+| POST | `/api/admin/users` | Создать пользователя | Административные |
+| GET | `/api/admin/users` | Список пользователей | Административные |
+| GET | `/api/admin/users/{id}` | Получить пользователя | Административные |
+| PUT | `/api/admin/users/{id}` | Обновить пользователя | Административные |
+| DELETE | `/api/admin/users/{id}` | Удалить пользователя | Административные |
+| GET | `/api/admin/users/{id}/accounts` | Счета пользователя | Административные |
+| POST | `/api/webhook/payment` | Обработка вебхука | Вебхук |
+| POST | `/api/webhook/generate-signature` | Генерация подписи (только админ) | Вебхук |
 
 
-Тестирование вебхука пошагово
+--- 
 
-Шаг 1: Логин админа
+### Тестирование вебхука пошагово
+
+#### Шаг 1: Логин админа
 
 Swagger:
 
@@ -160,7 +159,8 @@ ADMIN_TOKEN=$(curl -s -X POST http://localhost:8000/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{"email":"admin@test.com","password":"admin123"}' \
   | jq -r '.access_token')
-Шаг 2: Генерация подписи
+
+#### Шаг 2: Генерация подписи
 
 Swagger:
 
@@ -175,7 +175,8 @@ curl -X POST http://localhost:8000/api/webhook/generate-signature \
   -H "Authorization: Bearer $ADMIN_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"user_id": 1, "account_id": 1, "amount": 100.50}'
-Шаг 3: Отправка вебхука
+
+#### Шаг 3: Отправка вебхука
 
 Swagger:
 
@@ -193,7 +194,8 @@ curl -X POST http://localhost:8000/api/webhook/payment \
     "amount": 100.50,
     "signature": "abc123def456..."
   }'
-Шаг 4: Проверка баланса
+
+#### Шаг 4: Проверка баланса
 
 Swagger:
 
@@ -209,10 +211,12 @@ USER_TOKEN=$(curl -s -X POST http://localhost:8000/api/auth/login \
 
 curl -X GET http://localhost:8000/api/users/me/accounts \
   -H "Authorization: Bearer $USER_TOKEN"
-  
-Примечания
 
-Формирование подписи
+--- 
+
+### Примечания
+
+#### Формирование подписи
 
 Подпись формируется через SHA256:
 
@@ -232,7 +236,8 @@ secret_key = "gfdmhghif38yrf9ew0jkf32"
 signature_string = f"{account_id}{amount}{transaction_id}{user_id}{secret_key}"
 signature = hashlib.sha256(signature_string.encode()).hexdigest()
 # 7b47e41efe564a062029da3367bde8844bea0fb049f894687cee5d57f2858bc8
-Особенности
+
+#### Особенности
 
 Argon2 (безопасный, нет ограничений по длине)
 Автоматическое создание счета при первом платеже
