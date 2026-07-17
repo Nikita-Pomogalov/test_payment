@@ -35,6 +35,8 @@ services:
       - USER_EMAIL=${USER_EMAIL}
       - USER_PASSWORD=${USER_PASSWORD}
       - USER_FULL_NAME=${USER_FULL_NAME}
+    ports:
+      - "8000:8000"
     depends_on:
       db:
         condition: service_healthy
