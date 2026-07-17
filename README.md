@@ -32,72 +32,72 @@
 #### 1. Установка PostgreSQL
 
 **macOS:**
-bash. 
-brew install postgresql@15. 
-brew services start postgresql@15. 
-Ubuntu:  
+bash<br>
+brew install postgresql@15<br>
+brew services start postgresql@15<br>
+Ubuntu:<br>
 
-bash. 
-sudo apt update. 
-sudo apt install postgresql postgresql-contrib. 
-sudo service postgresql start. 
+bash<br>
+sudo apt update<br>
+sudo apt install postgresql postgresql-contrib<br>
+sudo service postgresql start<br>
 #### 2. Создание БД и пользователя
 
-bash. 
-sudo -u postgres psql. 
-sql. 
-CREATE USER payment_user WITH PASSWORD 'payment_pass';  
-CREATE DATABASE payment_db OWNER payment_user;  
-GRANT ALL PRIVILEGES ON DATABASE payment_db TO payment_user;  
-\q
+bash<br>
+sudo -u postgres psql<br>
+sql<br>
+CREATE USER payment_user WITH PASSWORD 'payment_pass';<br>
+CREATE DATABASE payment_db OWNER payment_user;<br>
+GRANT ALL PRIVILEGES ON DATABASE payment_db TO payment_user;<br>
+\q<br>
 #### 3. Настройка проекта
 
-bash. 
+bash<br>
 # Клонируем и переходим в папку
-git clone <repository-url>. 
-cd payment-system. 
+git clone <repository-url><br>
+cd payment-system<br>
 
 # Создаем виртуальное окружение
-python -m venv venv. 
-source venv/bin/activate  # Linux/Mac. 
+python -m venv venv<br>
+source venv/bin/activate  # Linux/Mac<br>
 # venv\Scripts\activate   # Windows
 
 # Устанавливаем зависимости
-pip install -r requirements.txt. 
-Создайте .env:  
+pip install -r requirements.txt<br>
+Создайте .env:<br>
 
-env
-DB_HOST=localhost. 
-DB_PORT=5432. 
-DB_USER=payment_user. 
-DB_PASSWORD=payment_pass. 
-DB_NAME=payment_db. 
-DB_ECHO=False. 
+env<br>
+DB_HOST=localhost<br>
+DB_PORT=5432<br>
+DB_USER=payment_user<br>
+DB_PASSWORD=payment_pass<br>
+DB_NAME=payment_db<br>
+DB_ECHO=False<br>
 
-SECRET_KEY=your_secret_key. 
-JWT_SECRET=your_jwt_secret_key_here_change_in_production. 
-JWT_ALGORITHM=HS256. 
-JWT_ACCESS_EXP=3600. 
-JWT_REFRESH_EXP=86400. 
+SECRET_KEY=your_secret_key<br>
+JWT_SECRET=your_jwt_secret_key_here_change_in_production<br>
+JWT_ALGORITHM=HS256<br>
+JWT_ACCESS_EXP=3600<br>
+JWT_REFRESH_EXP=86400<br>
 
-ADMIN_EMAIL=admin@test.com. 
-ADMIN_PASSWORD=admin123. 
-ADMIN_FULL_NAME=Admin User. 
+ADMIN_EMAIL=admin@test.com<br>
+ADMIN_PASSWORD=admin123<br>
+ADMIN_FULL_NAME=Admin User<br>
 
-USER_EMAIL=user@test.com. 
-USER_PASSWORD=user123. 
-USER_FULL_NAME=Test User. 
+USER_EMAIL=user@test.com<br>
+USER_PASSWORD=user123<br>
+USER_FULL_NAME=Test User<br>
 
 #### 4. Миграции и запуск
 
-bash. 
+bash<br>
 # Применяем миграции
-alembic upgrade head. 
+alembic upgrade head<br>
 
 # Запускаем приложение
-uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload. 
-Приложение доступно: http://localhost:8000. 
-Swagger: http://localhost:8000/docs. 
+uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload<br>
+Приложение доступно: http://localhost:8000<br>
+Swagger: http://localhost:8000/docs<br>
 
 ---
 
@@ -105,20 +105,20 @@ Swagger: http://localhost:8000/docs.
 
 #### 1. Запуск
 
-bash
+bash<br>
 # Сборка и запуск
-docker-compose up -d --build. 
+docker-compose up -d --build<br>
 
 #### 2. Доступ
 
-API: http://localhost:8000. 
-Swagger: http://localhost:8000/docs. 
-PostgreSQL: localhost:5433 (пароль: payment_pass). 
+API: http://localhost:8000<br>
+Swagger: http://localhost:8000/docs<br>
+PostgreSQL: localhost:5433 (пароль: payment_pass)<br>
 #### 3. Остановка
 
-bash. 
-docker-compose down. 
-API Эндпоинты. 
+bash<br>
+docker-compose down<br>
+API Эндпоинты<br>
 
 --- 
 
@@ -147,70 +147,70 @@ API Эндпоинты.
 
 #### Шаг 1: Логин админа
 
-Swagger:
+Swagger:<br>
 
-POST /api/auth/login. 
-Body: {"email":"admin@test.com","password":"admin123"}. 
-Скопировать access_token. 
-curl:
+POST /api/auth/login<br>
+Body: {"email":"admin@test.com","password":"admin123"}<br>
+Скопировать access_token<br>
+curl:<br>
 
-bash. 
-ADMIN_TOKEN=$(curl -s -X POST http://localhost:8000/api/auth/login \. 
-  -H "Content-Type: application/json" \. 
-  -d '{"email":"admin@test.com","password":"admin123"}' \. 
-  | jq -r '.access_token'). 
+bash<br>
+ADMIN_TOKEN=$(curl -s -X POST http://localhost:8000/api/auth/login \<br>
+  -H "Content-Type: application/json" \<br>
+  -d '{"email":"admin@test.com","password":"admin123"}' \<br>
+  | jq -r '.access_token')<br>
 
 #### Шаг 2: Генерация подписи
 
-Swagger:
+Swagger:<br>
 
-Нажать "Authorize", ввести Bearer <admin_token>. 
-POST /api/webhook/generate-signature. 
-Body: {"user_id": 1, "account_id": 1, "amount": 100.50}  
-Скопировать весь payload из ответа. 
-curl:
+Нажать "Authorize", ввести Bearer <admin_token><br>
+POST /api/webhook/generate-signature<br>
+Body: {"user_id": 1, "account_id": 1, "amount": 100.50}<br>
+Скопировать весь payload из ответа<br>
+curl:<br>
 
-bash. 
-curl -X POST http://localhost:8000/api/webhook/generate-signature \. 
-  -H "Authorization: Bearer $ADMIN_TOKEN" \. 
-  -H "Content-Type: application/json" \. 
-  -d '{"user_id": 1, "account_id": 1, "amount": 100.50}'. 
+bash<br>
+curl -X POST http://localhost:8000/api/webhook/generate-signature \<br>
+  -H "Authorization: Bearer $ADMIN_TOKEN" \<br>
+  -H "Content-Type: application/json" \<br>
+  -d '{"user_id": 1, "account_id": 1, "amount": 100.50}'<br>
 
 #### Шаг 3: Отправка вебхука
 
-Swagger:
+Swagger:<br>
 
-POST /api/webhook/payment. 
-Вставить скопированный payload. 
-curl:
+POST /api/webhook/payment<br>
+Вставить скопированный payload<br>
+curl:<br>
 
-bash  
-curl -X POST http://localhost:8000/api/webhook/payment \. 
-  -H "Content-Type: application/json" \. 
-  -d '{. 
-    "transaction_id": "7f8d3a2b-1c4e-5f6a-7b8c-9d0e1f2a3b4c",  
-    "user_id": 1,  
-    "account_id": 1,  
-    "amount": 100.50,  
-    "signature": "abc123def456..."  
-  }'. 
+bash<br>
+curl -X POST http://localhost:8000/api/webhook/payment \<br>
+  -H "Content-Type: application/json" \<br>
+  -d '{<br>
+    "transaction_id": "7f8d3a2b-1c4e-5f6a-7b8c-9d0e1f2a3b4c",<br>
+    "user_id": 1,<br>
+    "account_id": 1,<br>
+    "amount": 100.50,<br>
+    "signature": "abc123def456..."<br>
+  }'<br>
 
 #### Шаг 4: Проверка баланса
 
-Swagger:
+Swagger:<br>
 
-Авторизоваться как пользователь (user@test.com / user123). 
-GET /api/users/me/accounts - баланс должен увеличиться. 
-curl:
+Авторизоваться как пользователь (user@test.com / user123)<br>
+GET /api/users/me/accounts - баланс должен увеличиться<br>
+curl:<br>
 
-bash. 
-USER_TOKEN=$(curl -s -X POST http://localhost:8000/api/auth/login \. 
-  -H "Content-Type: application/json" \. 
-  -d '{"email":"user@test.com","password":"user123"}' \. 
-  | jq -r '.access_token'). 
+bash<br>
+USER_TOKEN=$(curl -s -X POST http://localhost:8000/api/auth/login \<br>
+  -H "Content-Type: application/json" \<br>
+  -d '{"email":"user@test.com","password":"user123"}' \<br>
+  | jq -r '.access_token')<br>
 
-curl -X GET http://localhost:8000/api/users/me/accounts \. 
-  -H "Authorization: Bearer $USER_TOKEN". 
+curl -X GET http://localhost:8000/api/users/me/accounts \<br>
+  -H "Authorization: Bearer $USER_TOKEN"<br>
 
 --- 
 
@@ -218,24 +218,24 @@ curl -X GET http://localhost:8000/api/users/me/accounts \.
 
 #### Формирование подписи
 
-Подпись формируется через SHA256:
+Подпись формируется через SHA256:<br>
 
-text  
-{account_id}{amount}{transaction_id}{user_id}{secret_key}. 
-Пример:
+text<br>
+{account_id}{amount}{transaction_id}{user_id}{secret_key}<br>
+Пример:<br>
 
-python. 
-import hashlib. 
+python<br>
+import hashlib<br>
 
-account_id = 1. 
-amount = 100. 
-transaction_id = "5eae174f-7cd0-472c-bd36-35660f00132b". 
-user_id = 1. 
-secret_key = "gfdmhghif38yrf9ew0jkf32". 
+account_id = 1<br>
+amount = 100<br>
+transaction_id = "5eae174f-7cd0-472c-bd36-35660f00132b"<br>
+user_id = 1<br>
+secret_key = "gfdmhghif38yrf9ew0jkf32"<br>
 
-signature_string = f"{account_id}{amount}{transaction_id}{user_id}{secret_key}". 
-signature = hashlib.sha256(signature_string.encode()).hexdigest(). 
-```7b47e41efe564a062029da3367bde8844bea0fb049f894687cee5d57f2858bc8```
+signature_string = f"{account_id}{amount}{transaction_id}{user_id}{secret_key}"<br>
+signature = hashlib.sha256(signature_string.encode()).hexdigest()<br>
+```7b47e41efe564a062029da3367bde8844bea0fb049f894687cee5d57f2858bc8```<br>
 
 #### Особенности
 
