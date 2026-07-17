@@ -235,7 +235,7 @@ secret_key = "gfdmhghif38yrf9ew0jkf32"
 
 signature_string = f"{account_id}{amount}{transaction_id}{user_id}{secret_key}"
 signature = hashlib.sha256(signature_string.encode()).hexdigest()
-# 7b47e41efe564a062029da3367bde8844bea0fb049f894687cee5d57f2858bc8
+```7b47e41efe564a062029da3367bde8844bea0fb049f894687cee5d57f2858bc8```
 
 #### Особенности
 
