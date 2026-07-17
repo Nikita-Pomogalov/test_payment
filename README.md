@@ -53,16 +53,16 @@ GRANT ALL PRIVILEGES ON DATABASE payment_db TO payment_user;<br>
 #### 3. Настройка проекта
 
 bash<br>
-# Клонируем и переходим в папку
+``Клонируем и переходим в папку``<br>
 git clone <repository-url><br>
 cd payment-system<br>
 
-# Создаем виртуальное окружение
+``Создаем виртуальное окружение``<br>
 python -m venv venv<br>
 source venv/bin/activate  # Linux/Mac<br>
-# venv\Scripts\activate   # Windows
+venv\Scripts\activate   # Windows<br>
 
-# Устанавливаем зависимости
+``Устанавливаем зависимости``<br>
 pip install -r requirements.txt<br>
 Создайте .env:<br>
 
@@ -91,10 +91,10 @@ USER_FULL_NAME=Test User<br>
 #### 4. Миграции и запуск
 
 bash<br>
-# Применяем миграции
+`` Применяем миграции ``<br>
 alembic upgrade head<br>
 
-# Запускаем приложение
+``Запускаем приложение``<br>
 uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload<br>
 Приложение доступно: http://localhost:8000<br>
 Swagger: http://localhost:8000/docs<br>
@@ -106,7 +106,7 @@ Swagger: http://localhost:8000/docs<br>
 #### 1. Запуск
 
 bash<br>
-# Сборка и запуск
+``Сборка и запуск``<br>
 docker-compose up -d --build<br>
 
 #### 2. Доступ
